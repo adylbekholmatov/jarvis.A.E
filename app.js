@@ -21,9 +21,9 @@ function wishMe() {
     const hour = day.getHours();
 
     if (hour >= 0 && hour < 12) {
-        playAudio('audio/good_morning.mp3'); // Путь к аудиофайлам
+        playAudio('dzharvis-libelirda.mp3'); // Путь к аудиофайлам
     } else if (hour >= 12 && hour < 17) {
-        playAudio('audio/good_afternoon.mp3');
+        playAudio('dzharvis-libelirda.mp3');
     } else {
         playAudio('audio/good_evening.mp3');
     }
@@ -51,11 +51,13 @@ btn.addEventListener('click', () => {
 
 async function takeCommand(message) {
     // Простейшая обработка команд
-    if (message.includes('hey') || message.includes('hello')) {
-        speak("Hello Sir, How May I Help You?");
+    if (message.includes('private jarvis') || message.includes('hello')) {
+         playAudio('Доброе утро.wav');
+    }else if  (message.includes('help me')){
+         playAudio('К вашим услугам сэр.wav');
     } else if (message.includes("open google")) {
         window.open("https://google.com", "_blank");
-        speak("Opening Google...");
+        playAudio('dzharvis-libelirda.mp3');
     } else if (message.includes("open youtube")) {
         window.open("https://youtube.com", "_blank");
         speak("Opening Youtube...");
