@@ -13,7 +13,7 @@
     <section class="main">
         <div class="image-container">
             <div class="image">
-                <img src="giphy.gif" alt="image">
+                <img src="jarvis-4k-in-red-6yayjpbfe1a5tkek.jpg" alt="image">
             </div>
             <h1>J A R V I S</h1>
             <p>I m a Virtual Assistant JARVIS, How may i help you?</p>
