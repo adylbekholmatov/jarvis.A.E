@@ -77,7 +77,7 @@ function takeCommand(message) {
         playAudio('Как пожелаете.wav');
     } else if (message.includes('википедия')) {
         window.open(`https://ru.wikipedia.org/wiki/${message.replace("википедия", "").trim()}`, "_blank");
-        speak("Вот, что я нашёл на Википедии по запросу " + message);
+        playAudio('Загружаю сэр.wav');
     } else if (message.includes('время')) {
         const time = new Date().toLocaleTimeString('ru-RU', { hour: "2-digit", minute: "2-digit" });
         speak("Текущее время " + time);
