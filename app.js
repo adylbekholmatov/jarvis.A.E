@@ -1,13 +1,20 @@
 const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
 
+const audioFiles = {
+    greetingMorning: 'dzharvis-libelirda.mp3',
+    greetingEvening: 'audio/good_evening.mp3',
+    morningResponse: 'Доброе утро.wav',
+    workResponse: 'Есть.wav',
+    praiseResponse: 'К вашим услугам сэр.wav'
+};
+
 function speak(text) {
     const text_speak = new SpeechSynthesisUtterance(text);
-    
-    text_speak.rate = 0.9;  // Уменьшаем скорость
-    text_speak.volume = 1;  // Максимальная громкость
-    text_speak.pitch = 1.2; // Чуть выше для "роботизированного" звучания
-
+    text_speak.lang = 'ru-RU';  // Устанавливаем язык на русский
+    text_speak.rate = 0.9;
+    text_speak.volume = 1;
+    text_speak.pitch = 1.2;
     window.speechSynthesis.speak(text_speak);
 }
 
@@ -17,76 +24,71 @@ function playAudio(file) {
 }
 
 function wishMe() {
-    const day = new Date();
-    const hour = day.getHours();
-
+    const hour = new Date().getHours();
     if (hour >= 0 && hour < 12) {
-        playAudio('dzharvis-libelirda.mp3'); // Путь к аудиофайлам
+        playAudio(audioFiles.greetingMorning);
     } else if (hour >= 12 && hour < 17) {
-        playAudio('dzharvis-libelirda.mp3');
+        playAudio(audioFiles.greetingMorning);
     } else {
-        playAudio('audio/good_evening.mp3');
+        playAudio(audioFiles.greetingEvening);
     }
 }
 
 window.addEventListener('load', () => {
-    speak("Initializing JARVIS...");
+    speak("Запуск JARVIS...");
     wishMe();
 });
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
+recognition.lang = 'ru-RU';  // Устанавливаем язык распознавания на русский
 
 recognition.onresult = (event) => {
-    const currentIndex = event.resultIndex;
-    const transcript = event.results[currentIndex][0].transcript;
+    const transcript = event.results[event.resultIndex][0].transcript;
     content.textContent = transcript;
     takeCommand(transcript.toLowerCase());
 };
 
 btn.addEventListener('click', () => {
-    content.textContent = "Listening...";
+    content.textContent = "Слушаю...";
     recognition.start();
 });
 
-async function takeCommand(message) {
-    // Простейшая обработка команд
-    if (message.includes('private jarvis') || message.includes('hello')) {
-         playAudio('Доброе утро.wav');
-    }else if  (message.includes('help me')){
-         playAudio('К вашим услугам сэр.wav');
-    } else if (message.includes("open google")) {
+function takeCommand(message) {
+    if (message.includes('эй') || message.includes('привет') || message.includes('здравствуй')) {
+        playAudio('Доброе утро.wav');
+    } else if (message.includes('помоги')) {
+        playAudio('Сэр, не будете дергаться больно не будет.wav');
+    } else if (message.includes('хорошая работа')) {
+        playAudio('К вашим услугам сэр.wav');
+    } else if (message.includes('выкинь')) {
+        playAudio('Сэр, похоже его костюм может летать.wav');
+    } else if (message.includes("открой гугл")) {
         window.open("https://google.com", "_blank");
-        playAudio('dzharvis-libelirda.mp3');
-    } else if (message.includes("open youtube")) {
-        window.open("https://youtube.com", "_blank");
-        speak("Opening Youtube...");
-    } else if (message.includes("open facebook")) {
-        window.open("https://facebook.com", "_blank");
-        speak("Opening Facebook...");
-    } else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
-        window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "This is what I found on the internet regarding " + message;
-        speak(finalText);
-    } else if (message.includes('wikipedia')) {
-        window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
-        const finalText = "This is what I found on Wikipedia regarding " + message;
-        speak(finalText);
-    } else if (message.includes('time')) {
-        const time = new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" });
-        const finalText = "The current time is " + time;
-        speak(finalText);
-    } else if (message.includes('date')) {
-        const date = new Date().toLocaleString(undefined, { month: "short", day: "numeric" });
-        const finalText = "Today's date is " + date;
-        speak(finalText);
-    } else if (message.includes('calculator')) {
-        window.open('Calculator:///');
-        const finalText = "Opening Calculator";
-        speak(finalText);
+        playAudio(audioFiles.greetingMorning);
+    } else if (message.includes("открой чат")) {
+        window.open("https://chatgpt.com", "_blank");
+        playAudio('Загружаю сэр.wav');
+    } else if (message.includes(" аниме")) {
+        window.open("https://jut.su", "_blank");
+        playAudio('О чем я думал, обычно у нас все веселенькое.wav')
+    } else if (message.includes('клевер')) {
+        window.open("https://r812104.yandexwebcache.org/black-clover/169.480.4b4e81d02628747f.mp4?hash1=8f95fc99f806f47b4c203d0d415eb519&hash2=99ac08fd6f8ecd2b8c74bc7666d55501", "_blank");
+        playAudio('Как пожелаете.wav');
+    } else if (message.includes('википедия')) {
+        window.open(`https://ru.wikipedia.org/wiki/${message.replace("википедия", "").trim()}`, "_blank");
+        speak("Вот, что я нашёл на Википедии по запросу " + message);
+    } else if (message.includes('время')) {
+        const time = new Date().toLocaleTimeString('ru-RU', { hour: "2-digit", minute: "2-digit" });
+        speak("Текущее время " + time);
+    } else if (message.includes('дата')) {
+        const date = new Date().toLocaleDateString('ru-RU', { month: "long", day: "numeric" });
+        speak("Сегодняшняя дата " + date);
+    } else if (message.includes('калькулятор')) {
+        window.open('Calculator:///', "_self");
+        speak("Открываю калькулятор");
     } else {
         window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "I found some information for " + message + " on Google";
-        speak(finalText);
+        speak("Вот что я нашел в интернете по запросу " + message);
     }
 }
