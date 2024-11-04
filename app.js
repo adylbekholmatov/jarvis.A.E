@@ -63,7 +63,7 @@ function takeCommand(message) {
         playAudio('К вашим услугам сэр.wav');
     } else if (message.includes('выкинь')) {
         playAudio('Сэр, похоже его костюм может летать.wav');
-    } else if (message.includes("открой гугл")) {
+    } else if (message.includes("открой Google")) {
         window.open("https://google.com", "_blank");
         playAudio(audioFiles.greetingMorning);
     } else if (message.includes("открой чат")) {
